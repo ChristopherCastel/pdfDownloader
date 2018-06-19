@@ -29,28 +29,28 @@ public class Main {
             default:
                 throw new IllegalArgumentException("Usage: java -jar [url] [path]");
         }
-        dfsTraversal(url, downloader);
+        dfsTraversal(url, url, downloader);
     }
 
-    private static void dfsTraversal(String url, HttpDownloadUtility downloader) throws IOException {
-        if (!url.endsWith("/")) {
-            url += "/";
+    private static void dfsTraversal(String baseUrl, String absHref, HttpDownloadUtility downloader) throws IOException {
+        if (!absHref.endsWith("/")) {
+            absHref += "/";
         }
-        if (visited.contains(url)) {
+        if (visited.contains(absHref)) {
             return;
         }
-        visited.add(url);
+        visited.add(absHref);
         try {
-            Document document = Jsoup.connect(url).get();
+            Document document = Jsoup.connect(absHref).get();
             Element body = document.selectFirst("body");
             Elements links = body.select("a[href]");
             for (Element link : links) {
-                String absHref = link.attr("abs:href");
+                absHref = link.attr("abs:href");
                 String href = link.attr("href");
                 if (downloader.isDownloadable(href)) {
                     downloader.download(absHref, href);
-                } else if (absHref.contains("repository.root-me.org") && !href.contains("?")) {
-                    dfsTraversal(absHref, downloader);
+                } else if (absHref.contains(baseUrl) && !href.contains("?")) {
+                    dfsTraversal(baseUrl, absHref, downloader);
                 }
             }
         } catch (Exception ignore) {
