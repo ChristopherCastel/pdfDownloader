@@ -1,11 +1,16 @@
 # pdfDownloader
 
-Web scrawler for downloading PDF files in Java.
+Basic web scrawler for downloading PDF files in Java.
 
 ## Objective
 
 Used to download all PDF from http://repository.root-me.org/ which gathers a large amount of security resources.
 It may not work for other websites for now.
+
+My main objective was to get my hands dirty with the Jsoup library in Java.
+
+The following command does same the job :
+``wget --no-verbose --recursive --accept .pdf http://repository.root-me.org/ ``
 
 ## Installing pdfDownloader
 
